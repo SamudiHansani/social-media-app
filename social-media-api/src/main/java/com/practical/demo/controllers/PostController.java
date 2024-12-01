@@ -2,14 +2,12 @@ package com.practical.demo.controllers;
 
 import com.practical.demo.dtos.PostDto;
 import com.practical.demo.models.Comment;
-import com.practical.demo.models.Post;
 import com.practical.demo.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -27,8 +25,9 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Post> one(@PathVariable Long id) {
-        return  new ResponseEntity<>(new Post(), HttpStatus.OK);
+    public ResponseEntity<PostDto> one(@PathVariable Long id) {
+        PostDto postDto = postService.getPostById(id);
+        return  new ResponseEntity<>(postDto, HttpStatus.OK);
     }
 
     @PostMapping("")
@@ -38,6 +37,6 @@ public class PostController {
 
     @PostMapping("/{postId}/comments")
     public void newComment(@PathVariable Long postId, @RequestBody Comment comment) {
-
+        postService.addComment(postId, comment);
     }
 }

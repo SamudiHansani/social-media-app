@@ -1,6 +1,8 @@
 package com.practical.demo.services;
 
+import com.practical.demo.dtos.CommentDto;
 import com.practical.demo.dtos.PostDto;
+import com.practical.demo.models.Comment;
 import com.practical.demo.models.Post;
 import com.practical.demo.repositories.CommentRepository;
 import com.practical.demo.repositories.PostRepository;
@@ -37,12 +39,23 @@ public class PostService {
     }
 
     public PostDto getPostById(Long id) {
-        //Post post = postRepository.findById(id);
-        return new PostDto();
+        Post post = postRepository.findById(id).orElseThrow();
+        List<Comment> comments = commentRepository.getAllByPost(post);
+        PostDto postDto = modelMapper.map(post, PostDto.class);
+        List<CommentDto> commentDtos = comments.stream().map(comment -> modelMapper.map(comment, CommentDto.class)).toList();
+        postDto.setComments(commentDtos);
+        postDto.setCommentsCount(commentDtos.size());
+        return postDto;
     }
 
     public void createPost(PostDto postDto) {
         Post newPost = modelMapper.map(postDto, Post.class);
         postRepository.save(newPost);
+    }
+
+    public void addComment(Long postId, Comment comment) {
+        Post post = postRepository.findById(postId).orElseThrow();
+        comment.setPost(post);
+        commentRepository.save(comment);
     }
 }
