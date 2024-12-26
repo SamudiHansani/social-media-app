@@ -36,7 +36,8 @@ public class PostController {
     }
 
     @PostMapping("/{postId}/comments")
-    public void newComment(@PathVariable Long postId, @RequestBody Comment comment) {
-        postService.addComment(postId, comment);
+    public ResponseEntity<PostDto> newComment(@PathVariable Long postId, @RequestBody Comment comment) {
+        PostDto postDto = postService.addComment(postId, comment);
+        return  new ResponseEntity<>(postDto, HttpStatus.OK);
     }
 }

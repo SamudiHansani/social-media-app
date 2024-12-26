@@ -53,9 +53,10 @@ public class PostService {
         postRepository.save(newPost);
     }
 
-    public void addComment(Long postId, Comment comment) {
+    public PostDto addComment(Long postId, Comment comment) {
         Post post = postRepository.findById(postId).orElseThrow();
         comment.setPost(post);
         commentRepository.save(comment);
+        return modelMapper.map(post, PostDto.class);
     }
 }

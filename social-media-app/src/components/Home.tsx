@@ -28,7 +28,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="container d-flex row m-auto mt-3 row-gap-5">
+    <div className="container d-flex row justify-content-center m-auto mt-3 row-gap-5">
       <button
         type="button"
         className="btn btn-primary w-25"
